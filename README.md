@@ -40,6 +40,20 @@ If the installation was successful you should see a help screen.
 cd jaffle_shop
 ```
 
+4. Set-up a connection to a data warehouse using the **profiles.yml** file.
+
+5. To run the tests that can be found in the **schema.yml** file:
+
+```
+dbt test
+```
+
+6. To run the project:
+
+```
+dbt run
+```
+
 ## Tools Used
 
 - Data Build Tool - dbt
