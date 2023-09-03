@@ -9,10 +9,13 @@ order_payments as (
     select
         order_id,
         payment_date,
-        payment_amount
+
+        sum(payment_amount) as total_amount_paid
+
     from payments
     -- Filter by successful payments only
     where payment_status <> 'fail'
+    group by 1, 2
 
 )
 

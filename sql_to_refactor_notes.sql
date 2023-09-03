@@ -41,7 +41,7 @@ select
     ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY p.order_id) as customer_sales_seq,
     CASE 
         WHEN c.first_order_date = p.order_placed_at THEN 'new'
-    ELSE 'return' END as nvsr, -- nvsr stands for new vs return. Note! Return here means returning customer.
+    ELSE 'return' END as nvsr, -- "nvsr" stands for new vs return, and "return" means returning customer.
     x.clv_bad as customer_lifetime_value,
     c.first_order_date as fdos
 FROM paid_orders p
@@ -54,12 +54,13 @@ LEFT OUTER JOIN
     from paid_orders p
     left join paid_orders t2 
     /*
-    The same customer can have many orders (order IDs) so we need to sum by more than one order, but it is strange the 
-    statement used order id instead of customer id.
+    The same customer can have many orders (order IDs) so we need to sum by more than one order. 
+    
+    It is also strange that the statement uses order_id instead of customer_id.
 
-    bad might indicate that clv has been calculated incorrectly, i.e. we need to use p.customer_id not p.order_id.
+    The "bad" in the alias "clv_bad" might indicate that clv has been calculated incorrectly.
 
-    Assume that the clv calculation uses the common formula that takes into account returns.
+    Assume that the clv calculation takes into account returns.
     */
     on p.customer_id = t2.customer_id and p.order_id >= t2.order_id 
     group by 1
