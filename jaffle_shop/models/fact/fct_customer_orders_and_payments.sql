@@ -31,4 +31,17 @@ customer_orders_and_payments as (
 
 )
 
+{{
+ config(
+ materialized = 'incremental',
+ on_schema_change='fail'
+ )
+}}
+
 select * from customer_orders_and_payments
+where total_amount_paid > 0
+-- "this" refers to the fct_customer_orders_and_payments.sql model.
+-- "order_date" is for the customers_orders_and_payments table in this case.
+{% if is_incremental() %}
+    and order_date > (select max(order_date) from {{ this }})
+{% endif %} 

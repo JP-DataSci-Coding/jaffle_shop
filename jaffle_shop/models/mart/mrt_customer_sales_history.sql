@@ -36,8 +36,7 @@ customer_sales_history as (
     left join customer_lifetime_orders clo
     on cop.customer_id = clo.customer_id
     left join customer_lifetime_values clv
-    -- We need to join on both customer_id and order_date to remove duplicates
-    on cop.customer_id = clv.customer_id and cop.order_date = clv.order_date
+    on cop.order_id = clv.order_id
     order by customer_id, order_date
 
 )
